@@ -21,7 +21,7 @@ import com.intuit.tms.entities.Team;
 import com.intuit.tms.services.TeamService;
 
 @RestController
-public class TeamRestController {
+public class TeamManagementRestController {
 
 	@Autowired
 	private TeamService teamService;

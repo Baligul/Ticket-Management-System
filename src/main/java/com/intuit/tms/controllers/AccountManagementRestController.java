@@ -24,7 +24,7 @@ import com.intuit.tms.services.AccountService;
 import com.intuit.tms.services.TeamService;
 
 @RestController
-public class AccountRestController {
+public class AccountManagementRestController {
 
 	@Autowired
 	private AccountService accountService;
