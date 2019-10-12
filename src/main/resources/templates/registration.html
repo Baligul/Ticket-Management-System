@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	layout:decorator="layout">
+
+<head>
+<title>Registration</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div th:if="${param.success}">
+			<div class="alert alert-info">You've successfully registered to
+				our awesome app!</div>
+		</div>
+		<h1>Registration</h1>
+		<form th:action="@{/registration}" th:object="${account}" method="post">
+
+			<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+				th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+				error</p>
+
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('name')}? 'has-error':''">
+				<label for="name" class="control-label">Name</label> <input
+					id="name" class="form-control" th:field="*{name}" />
+				<p class="error-message" th:each="error: ${#fields.errors('name')}"
+					th:text="${error}">Validation error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('mobilePhone')}? 'has-error':''">
+				<label for="mobilePhone" class="control-label">Mobile phone</label> <input
+					id="mobilePhone" class="form-control" th:field="*{mobilePhone}" />
+				<p class="error-message" th:each="error: ${#fields.errors('mobilePhone')}"
+					th:text="${error}">Validation error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+				<label for="email" class="control-label">E-mail</label> <input
+					id="email" class="form-control" th:field="*{email}" />
+				<p class="error-message"
+					th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
+					error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('confirmEmail')}? 'has-error':''">
+				<label for="confirmEmail" class="control-label">Confirm
+					e-mail</label> <input id="confirmEmail" class="form-control"
+					th:field="*{confirmEmail}" />
+				<p class="error-message"
+					th:each="error : ${#fields.errors('confirmEmail')}"
+					th:text="${error}">Validation error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+				<label for="password" class="control-label">Password</label> <input
+					id="password" class="form-control" type="password"
+					th:field="*{password}" />
+				<p class="error-message"
+					th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation
+					error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
+				<label for="confirmPassword" class="control-label">Confirm
+					password</label> <input id="confirmPassword" class="form-control"
+					type="password" th:field="*{confirmPassword}" />
+				<p class="error-message"
+					th:each="error : ${#fields.errors('confirmPassword')}"
+					th:text="${error}">Validation error</p>
+			</div>
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
+				<input id="terms" type="checkbox" th:field="*{terms}" /> <label
+					class="control-label" for="terms"> I agree with the <a
+					href="#">terms and conditions</a> for Registration.
+				</label>
+				<p class="error-message"
+					th:each="error : ${#fields.errors('terms')}" th:text="${error}">Validation
+					error</p>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Register</button>
+				<span>Already registered? <a href="/" th:href="@{/login}">Login
+						here</a></span>
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>
