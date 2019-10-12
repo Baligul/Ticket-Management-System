@@ -43,9 +43,7 @@ public class AccountRegistrationController {
 			return "registration";
 		}
 
-		accountDTO.setUsername(accountDTO.getEmail());
-
-		accountService.save(accountDTO);
+		accountService.save(accountDTO, null);
 		return "redirect:/registration?success";
 	}
 

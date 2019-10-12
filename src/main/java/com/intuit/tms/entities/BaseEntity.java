@@ -17,7 +17,7 @@ public class BaseEntity {
 	private static final Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "created_on", columnDefinition = "CURRENT_TIMESTAMP", updatable = false)

@@ -1,9 +1,8 @@
 package com.intuit.tms.entities;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -23,8 +22,8 @@ public class Team extends BaseEntity {
 	@Column(name = "team_type")
 	private int teamType;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "teams")
-	private List<Account> accounts;
+	@ManyToMany(mappedBy = "teams")
+	private Set<Account> accounts;
 
 	@Column(name = "created_by")
 	private Long createdBy;
@@ -38,7 +37,7 @@ public class Team extends BaseEntity {
 	public Team() {
 	}
 
-	public Team(@NotNull String name, String description, int teamType, List<Account> accounts, Long createdBy,
+	public Team(@NotNull String name, String description, int teamType, Set<Account> accounts, Long createdBy,
 			LocalDateTime updatedOn, Long updatedBy) {
 		super();
 		this.name = name;
@@ -77,11 +76,11 @@ public class Team extends BaseEntity {
 		this.teamType = teamType;
 	}
 
-	public List<Account> getAccounts() {
+	public Set<Account> getAccounts() {
 		return accounts;
 	}
 
-	public void setAccounts(List<Account> accounts) {
+	public void setAccounts(Set<Account> accounts) {
 		this.accounts = accounts;
 	}
 

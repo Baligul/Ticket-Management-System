@@ -1,9 +1,8 @@
 package com.intuit.tms.entities;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -17,6 +16,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "account")
@@ -35,13 +36,15 @@ public class Account extends BaseEntity {
 	@Email(message = "{errors.invalid_email}")
 	private String email;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany()
 	@JoinTable(name = "account_role_map", joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private List<Role> roles;
+	@JsonIgnore
+	private Set<Role> roles;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany()
 	@JoinTable(name = "account_team_map", joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
-	private List<Team> teams;
+	@JsonIgnore
+	private Set<Team> teams;
 
 	@NotNull
 	@Pattern(regexp = "(^$|[0-9]{10})")
@@ -94,7 +97,7 @@ public class Account extends BaseEntity {
 	}
 
 	public Account(@NotNull String name, @NotNull String username,
-			@NotNull @Email(message = "{errors.invalid_email}") String email, List<Role> roles, List<Team> teams,
+			@NotNull @Email(message = "{errors.invalid_email}") String email, Set<Role> roles, Set<Team> teams,
 			@NotNull @Pattern(regexp = "(^$|[0-9]{10})") String mobilePhone,
 			@NotNull @Size(min = 2, max = 256) String password, String gender, boolean enabled, boolean expired,
 			boolean locked, boolean credentialsExpired, LocalDateTime lastLogin, Long createdBy,
@@ -164,19 +167,19 @@ public class Account extends BaseEntity {
 		this.email = email;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
-	public List<Team> getTeams() {
+	public Set<Team> getTeams() {
 		return teams;
 	}
 
-	public void setTeams(List<Team> teams) {
+	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
 

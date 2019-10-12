@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Team;
+import com.intuit.tms.repositories.AccountTeamMapRepository;
 import com.intuit.tms.repositories.TeamRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.TeamService;
@@ -20,8 +21,12 @@ public class TeamServiceImpl implements TeamService {
 
 	@Autowired
 	TeamRepository teamRepository;
+
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
+
+	@Autowired
+	AccountTeamMapRepository accountTeamMapRepository;
 
 	@Override
 	public Team getTeamByName(String name) {
@@ -61,6 +66,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public void deleteTeam(Long teamId) {
 		teamRepository.deleteById(teamId);
+		accountTeamMapRepository.deleteByTeamId(teamId);
 	}
 
 	@Override

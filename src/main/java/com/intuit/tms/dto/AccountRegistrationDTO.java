@@ -35,8 +35,6 @@ public class AccountRegistrationDTO {
 	@AssertTrue
 	private Boolean terms;
 
-	private String username;
-
 	@NotNull
 	@Pattern(regexp = "(^$|[0-9]{10})")
 	private String mobilePhone;
@@ -87,14 +85,6 @@ public class AccountRegistrationDTO {
 
 	public void setTerms(Boolean terms) {
 		this.terms = terms;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getMobilePhone() {

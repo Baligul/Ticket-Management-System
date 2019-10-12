@@ -2,7 +2,6 @@ package com.intuit.tms.security;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +26,7 @@ public class AuthenticatedAccount extends org.springframework.security.core.user
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(Account user) {
 		Set<String> roleAndPermissions = new HashSet<>();
-		List<Role> roles = user.getRoles();
+		Set<Role> roles = user.getRoles();
 
 		for (Role role : roles) {
 			roleAndPermissions.add(role.getRole());

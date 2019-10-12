@@ -2,12 +2,14 @@ package com.intuit.tms.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "role")
@@ -18,7 +20,8 @@ public class Role extends BaseEntity {
 
 	// Notice that we use "roles" not the table name of "role". "roles" is from
 	// Account.roles.
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "roles")
+	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
 	private List<Account> accounts;
 
 	protected Role() {
