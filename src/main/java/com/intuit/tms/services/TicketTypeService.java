@@ -11,7 +11,7 @@ public interface TicketTypeService {
 
 	TicketType getTicketTypeById(Long id);
 
-	TicketType saveTicketType(TicketTypeDTO icketTypeDTO);
+	TicketType saveTicketType(TicketTypeDTO ticketTypeDTO);
 
 	List<TicketType> getAllTicketTypes();
 
