@@ -15,6 +15,7 @@ import com.intuit.tms.repositories.TicketTypeRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.TicketTypeService;
 import com.intuit.tms.dto.TicketTypeDTO;
+import com.intuit.tms.dto.TicketTypeUpdateDTO;
 
 @Service
 public class TicketTypeServiceImpl implements TicketTypeService {
@@ -29,17 +30,8 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 	AccountTeamMapRepository accountTeamMapRepository;
 
 	@Override
-	public TicketType getTicketTypeByTitle(String title) {
-		Optional<TicketType> ticketType = ticketTypeRepository.findByTitle(title);
-		if (ticketType.isPresent()) {
-			return ticketType.get();
-		}
-		return null;
-	}
-
-	@Override
-	public TicketType getTicketTypeById(Long ticketTypeId) {
-		Optional<TicketType> ticketType = ticketTypeRepository.findById(ticketTypeId);
+	public TicketType getTicketTypeByTicketType(String strTicketType) {
+		Optional<TicketType> ticketType = ticketTypeRepository.findByTicketType(strTicketType);
 		if (ticketType.isPresent()) {
 			return ticketType.get();
 		}
@@ -51,7 +43,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
 		TicketType ticketType = new TicketType();
-		ticketType.setTitle(ticketTypeDTO.getTitle());
+		ticketType.setTicketType(ticketTypeDTO.getTicketType());
 		ticketType.setDescription(ticketTypeDTO.getDescription());
 		ticketType.setCreatedBy(createdBy);
 		return ticketTypeRepository.save(ticketType);
@@ -63,18 +55,17 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 	}
 
 	@Override
-	public void deleteTicketType(Long ticketTypeId) {
-		ticketTypeRepository.deleteById(ticketTypeId);
+	public void deleteTicketType(String ticketType) {
+		ticketTypeRepository.deleteByTicketType(ticketType);
 	}
 
 	@Override
-	public TicketType updateTicketType(TicketTypeDTO ticketTypeDTO, Long ticketTypeId) {
+	public TicketType updateTicketType(TicketTypeUpdateDTO ticketTypeUpdateDTO, String strTicketType) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
 		TicketType ticketType = new TicketType();
-		ticketType.setId(ticketTypeId);
-		ticketType.setTitle(ticketTypeDTO.getTitle());
-		ticketType.setDescription(ticketTypeDTO.getDescription());
+		ticketType.setTicketType(strTicketType);
+		ticketType.setDescription(ticketTypeUpdateDTO.getDescription());
 		ticketType.setUpdatedBy(updatedBy);
 		ticketType.setUpdatedOn(LocalDateTime.now());
 		return ticketTypeRepository.save(ticketType);

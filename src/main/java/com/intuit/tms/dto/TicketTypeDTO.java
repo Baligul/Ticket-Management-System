@@ -7,18 +7,18 @@ public class TicketTypeDTO {
 
 	@Column(nullable = false, unique = true)
 	@NotNull
-	private String title;
+	private String ticketType;
 
 	private String description;
 
 	// Getters and Setters
 	// ===================
-	public String getTitle() {
-		return title;
+	public String getTicketType() {
+		return ticketType;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTicketType(String ticketType) {
+		this.ticketType = ticketType;
 	}
 
 	public String getDescription() {

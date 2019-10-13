@@ -5,18 +5,17 @@ import com.intuit.tms.entities.Status;
 import java.util.List;
 
 import com.intuit.tms.dto.StatusDTO;
+import com.intuit.tms.dto.StatusUpdateDTO;
 
 public interface StatusService {
-
-	Status getStatusById(Long id);
 
 	Status saveStatus(StatusDTO statusDTO);
 
 	List<Status> getAllStatuses();
 
-	void deleteStatus(Long id);
+	void deleteStatus(String status);
 
-	Status updateStatus(StatusDTO statusDTO, Long statusId);
+	Status updateStatus(StatusUpdateDTO statusUpdateDTO, String status);
 
 	Status getStatusByStatus(String strStatus);
 }

@@ -3,16 +3,16 @@ package com.intuit.tms.entities;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ticket_type")
-public class TicketType extends BaseEntity {
+public class TicketType extends BaseEntityWithoutId {
 
-	@Column(nullable = false, unique = true)
-	@NotNull
-	private String title;
+	@Id
+	@Column(name = "ticket_type")
+	private String ticketType;
 
 	private String description;
 
@@ -28,10 +28,9 @@ public class TicketType extends BaseEntity {
 	public TicketType() {
 	}
 
-	public TicketType(@NotNull String title, String description, Long createdBy, LocalDateTime updatedOn,
-			Long updatedBy) {
+	public TicketType(String ticketType, String description, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
 		super();
-		this.title = title;
+		this.ticketType = ticketType;
 		this.description = description;
 		this.createdBy = createdBy;
 		this.updatedOn = updatedOn;
@@ -41,12 +40,12 @@ public class TicketType extends BaseEntity {
 	// Getters and Setters
 	// ===================
 
-	public String getTitle() {
-		return title;
+	public String getTicketType() {
+		return ticketType;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTicketType(String ticketType) {
+		this.ticketType = ticketType;
 	}
 
 	public String getDescription() {

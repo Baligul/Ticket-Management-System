@@ -3,15 +3,14 @@ package com.intuit.tms.entities;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "status")
-public class Status extends BaseEntity {
+public class Status extends BaseEntityWithoutId {
 
-	@Column(nullable = false, unique = true)
-	@NotNull
+	@Id
 	private String status;
 
 	private String description;
@@ -28,7 +27,7 @@ public class Status extends BaseEntity {
 	public Status() {
 	}
 
-	public Status(@NotNull String status, String description, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
+	public Status(String status, String description, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
 		super();
 		this.status = status;
 		this.description = description;

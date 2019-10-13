@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.intuit.tms.entities.TicketType;
 
-public interface TicketTypeRepository extends JpaRepository<TicketType, Long> {
-	Optional<TicketType> findByTitle(String title);
+public interface TicketTypeRepository extends JpaRepository<TicketType, String> {
+	Optional<TicketType> findByTicketType(String ticketType);
+
+	void deleteByTicketType(String ticketType);
 }

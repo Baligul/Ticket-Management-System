@@ -1,11 +1,11 @@
 CREATE TABLE workflow_details
 (
-    id          BIGSERIAL,
-    workflow_id BIGINT NOT NULL REFERENCES workflow (id),
-    status_id   BIGINT NOT NULL REFERENCES status (id),
-    order       INTEGER,
-    created_on  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id           BIGSERIAL,
+    workflow_id  BIGINT NOT NULL REFERENCES workflow (id),
+    status       VARCHAR(256) NOT NULL REFERENCES status (status),
+    sequence     INTEGER,
+    created_on   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    UNIQUE (workflow_id, staus_id, order),
-    CONSTRAINT pk_workflow PRIMARY KEY (id)
+    UNIQUE (workflow_id, status),
+    CONSTRAINT pk_workflow_details PRIMARY KEY (id)
 );

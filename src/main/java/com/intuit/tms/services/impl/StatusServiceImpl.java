@@ -15,6 +15,7 @@ import com.intuit.tms.repositories.StatusRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.StatusService;
 import com.intuit.tms.dto.StatusDTO;
+import com.intuit.tms.dto.StatusUpdateDTO;
 
 @Service
 public class StatusServiceImpl implements StatusService {
@@ -38,15 +39,6 @@ public class StatusServiceImpl implements StatusService {
 	}
 
 	@Override
-	public Status getStatusById(Long statusId) {
-		Optional<Status> status = statusRepository.findById(statusId);
-		if (status.isPresent()) {
-			return status.get();
-		}
-		return null;
-	}
-
-	@Override
 	public Status saveStatus(StatusDTO statusDTO) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
@@ -63,20 +55,20 @@ public class StatusServiceImpl implements StatusService {
 	}
 
 	@Override
-	public void deleteStatus(Long statusId) {
-		statusRepository.deleteById(statusId);
+	public void deleteStatus(String status) {
+		statusRepository.deleteByStatus(status);
+
 	}
 
 	@Override
-	public Status updateStatus(StatusDTO statusDTO, Long statusId) {
+	public Status updateStatus(StatusUpdateDTO statusUpdateDTO, String status) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
-		Status status = new Status();
-		status.setId(statusId);
-		status.setStatus(statusDTO.getStatus());
-		status.setDescription(statusDTO.getDescription());
-		status.setUpdatedBy(updatedBy);
-		status.setUpdatedOn(LocalDateTime.now());
-		return statusRepository.save(status);
+		Status updatedStatus = new Status();
+		updatedStatus.setStatus(status);
+		updatedStatus.setDescription(statusUpdateDTO.getDescription());
+		updatedStatus.setUpdatedBy(updatedBy);
+		updatedStatus.setUpdatedOn(LocalDateTime.now());
+		return statusRepository.save(updatedStatus);
 	}
 }

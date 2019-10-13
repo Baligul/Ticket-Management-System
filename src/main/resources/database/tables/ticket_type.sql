@@ -1,12 +1,11 @@
 CREATE TABLE ticket_type
 (
-    id                  BIGSERIAL,
-    title               VARCHAR(256),
+    ticket_type         VARCHAR(256),
     description         VARCHAR(256),
     created_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by          BIGINT,
     updated_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by          BIGINT,
 
-    CONSTRAINT pk_ticket_type PRIMARY KEY (id)
+    CONSTRAINT pk_ticket_type PRIMARY KEY (ticket_type)
 );

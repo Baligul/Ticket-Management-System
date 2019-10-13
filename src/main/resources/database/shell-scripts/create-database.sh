@@ -85,6 +85,8 @@ echo "- status"
 $PSQL -h localhost -p 5432 -U tms -w -d $database  < ../tables/status.sql
 echo "- workflow"
 $PSQL -h localhost -p 5432 -U tms -w -d $database  < ../tables/workflow.sql
+echo "- workflow_details"
+$PSQL -h localhost -p 5432 -U tms -w -d $database  < ../tables/workflow_details.sql
 echo "- project_ticket_type_workflow_map"
 $PSQL -h localhost -p 5432 -U tms -w -d $database  < ../tables/project_ticket_type_workflow_map.sql
 echo "- ticket"

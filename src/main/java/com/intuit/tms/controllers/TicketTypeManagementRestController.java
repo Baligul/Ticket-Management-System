@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.intuit.tms.dto.TicketTypeDTO;
+import com.intuit.tms.dto.TicketTypeUpdateDTO;
 import com.intuit.tms.entities.TicketType;
 import com.intuit.tms.services.TicketTypeService;
 
@@ -31,14 +33,18 @@ public class TicketTypeManagementRestController {
 		return new TicketTypeDTO();
 	}
 
+	@ModelAttribute("ticketTypeUpdate")
+	public TicketTypeUpdateDTO ticketTypeUpdateDTO() {
+		return new TicketTypeUpdateDTO();
+	}
+
 	@PostMapping("/admin/api/v1/ticketType")
 	public ResponseEntity<Object> saveTicketType(@ModelAttribute("ticketType") @Valid TicketTypeDTO ticketTypeDTO,
 			BindingResult result) {
 
-		TicketType existing = ticketTypeService.getTicketTypeByTitle(ticketTypeDTO.getTitle());
+		TicketType existing = ticketTypeService.getTicketTypeByTicketType(ticketTypeDTO.getTicketType());
 		if (existing != null) {
-			return new ResponseEntity<Object>(
-					"There is already exist a ticketType with title as " + ticketTypeDTO.getTitle(),
+			return new ResponseEntity<Object>("There is already exist a ticketType as " + ticketTypeDTO.getTicketType(),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -63,13 +69,13 @@ public class TicketTypeManagementRestController {
 		}
 	}
 
-	@PutMapping("/admin/api/v1/ticketType/{ticketTypeId}")
-	public ResponseEntity<Object> updateTicketType(@PathVariable(name = "ticketTypeId") Long ticketTypeId,
-			@ModelAttribute("ticketType") @Valid TicketTypeDTO ticketTypeDTO, BindingResult result) {
+	@PutMapping("/admin/api/v1/ticketType/{ticketType}")
+	public ResponseEntity<Object> updateTicketType(@PathVariable(name = "ticketType") String strTicketType,
+			@ModelAttribute("ticketTypeUpdate") @Valid TicketTypeUpdateDTO ticketTypeUpdateDTO, BindingResult result) {
 
-		TicketType existing = ticketTypeService.getTicketTypeById(ticketTypeId);
+		TicketType existing = ticketTypeService.getTicketTypeByTicketType(strTicketType);
 		if (existing == null) {
-			return new ResponseEntity<Object>("The ticketType with ticketType id as " + ticketTypeId + " is not found",
+			return new ResponseEntity<Object>("The ticketType as " + strTicketType + " is not found",
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -77,23 +83,24 @@ public class TicketTypeManagementRestController {
 			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
 		}
 
-		ticketTypeService.updateTicketType(ticketTypeDTO, ticketTypeId);
+		ticketTypeService.updateTicketType(ticketTypeUpdateDTO, strTicketType);
 
-		return new ResponseEntity<Object>(
-				"You have successfully updated a ticketType with ticketType id " + ticketTypeId, HttpStatus.OK);
+		return new ResponseEntity<Object>("You have successfully updated a ticketType as " + strTicketType,
+				HttpStatus.OK);
 	}
 
-	@DeleteMapping("/admin/api/v1/ticketType/{ticketTypeId}")
-	public ResponseEntity<Object> deleteTicketType(@PathVariable(name = "ticketTypeId") Long ticketTypeId) {
+	@Transactional
+	@DeleteMapping("/admin/api/v1/ticketType/{ticketType}")
+	public ResponseEntity<Object> deleteTicketType(@PathVariable(name = "ticketType") String strTicketType) {
 
-		TicketType existing = ticketTypeService.getTicketTypeById(ticketTypeId);
+		TicketType existing = ticketTypeService.getTicketTypeByTicketType(strTicketType);
 		if (existing == null) {
-			return new ResponseEntity<Object>("The ticketType with ticketType id as " + ticketTypeId + " is not found",
+			return new ResponseEntity<Object>("The ticketType as " + strTicketType + " is not found",
 					HttpStatus.BAD_REQUEST);
 		}
 
 		try {
-			ticketTypeService.deleteTicketType(ticketTypeId);
+			ticketTypeService.deleteTicketType(strTicketType);
 			return new ResponseEntity<Object>("ticketType successfully deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);

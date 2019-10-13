@@ -1,6 +1,5 @@
 CREATE TABLE status
 (
-    id                  BIGSERIAL,
     status              VARCHAR(256),
     description         VARCHAR(256),
     created_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -8,5 +7,5 @@ CREATE TABLE status
     updated_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by          BIGINT,
 
-    CONSTRAINT pk_status PRIMARY KEY (id)
+    CONSTRAINT pk_status PRIMARY KEY (status)
 );

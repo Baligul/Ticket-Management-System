@@ -5,17 +5,16 @@ import com.intuit.tms.entities.TicketType;
 import java.util.List;
 
 import com.intuit.tms.dto.TicketTypeDTO;
+import com.intuit.tms.dto.TicketTypeUpdateDTO;
 
 public interface TicketTypeService {
-	TicketType getTicketTypeByTitle(String title);
-
-	TicketType getTicketTypeById(Long id);
+	TicketType getTicketTypeByTicketType(String ticketType);
 
 	TicketType saveTicketType(TicketTypeDTO ticketTypeDTO);
 
 	List<TicketType> getAllTicketTypes();
 
-	void deleteTicketType(Long id);
+	TicketType updateTicketType(TicketTypeUpdateDTO ticketTypeUpdateDTO, String ticketType);
 
-	TicketType updateTicketType(TicketTypeDTO ticketTypeDTO, Long ticketTypeId);
+	void deleteTicketType(String ticketType);
 }
