@@ -37,6 +37,10 @@ public class Team extends BaseEntity {
 	public Team() {
 	}
 
+	public Team(Long teamId) {
+		this.setId(teamId);
+	}
+
 	public Team(@NotNull String name, String description, int teamType, Set<Account> accounts, Long createdBy,
 			LocalDateTime updatedOn, Long updatedBy) {
 		super();
@@ -51,7 +55,6 @@ public class Team extends BaseEntity {
 
 	// Getters and Setters
 	// ===================
-
 	public String getName() {
 		return name;
 	}

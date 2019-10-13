@@ -1,6 +1,5 @@
 package com.intuit.tms.dto;
 
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,7 +14,7 @@ public class ProjectDTO {
 	private String description;
 
 	private Set<Long> teamIds;
-	private Map<String, Long> supportedticketTypesAndTheirWorkflow;
+	private Set<String> supportedticketTypesAndTheirWorkflow;
 
 	// Getters and Setters
 	// ===================
@@ -44,11 +43,11 @@ public class ProjectDTO {
 		this.teamIds = teamIds;
 	}
 
-	public Map<String, Long> getSupportedticketTypesAndTheirWorkflow() {
+	public Set<String> getSupportedticketTypesAndTheirWorkflow() {
 		return supportedticketTypesAndTheirWorkflow;
 	}
 
-	public void setSupportedticketTypesAndTheirWorkflow(Map<String, Long> supportedticketTypesAndTheirWorkflow) {
+	public void setSupportedticketTypesAndTheirWorkflow(Set<String> supportedticketTypesAndTheirWorkflow) {
 		this.supportedticketTypesAndTheirWorkflow = supportedticketTypesAndTheirWorkflow;
 	}
 }

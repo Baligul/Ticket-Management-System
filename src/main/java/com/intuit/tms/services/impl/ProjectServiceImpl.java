@@ -1,8 +1,10 @@
 package com.intuit.tms.services.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,13 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.intuit.tms.entities.Project;
-import com.intuit.tms.entities.ProjectTeamMap;
-import com.intuit.tms.entities.ProjectTeamMapId;
+import com.intuit.tms.entities.ProjectTicketTypeWorkflowMap;
+import com.intuit.tms.entities.ProjectTicketTypeWorkflowMapId;
 import com.intuit.tms.repositories.ProjectTeamMapRepository;
+import com.intuit.tms.repositories.ProjectTicketTypeWorkflowMapRepository;
 import com.intuit.tms.repositories.ProjectRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.ProjectService;
 import com.intuit.tms.dto.ProjectDTO;
+import com.intuit.tms.entities.Team;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -30,6 +34,9 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	ProjectTeamMapRepository projectTeamMapRepository;
+
+	@Autowired
+	ProjectTicketTypeWorkflowMapRepository projectTicketTypeWorkflowMapRepository;
 
 	@Override
 	public Project getProjectByName(String name) {
@@ -60,11 +67,23 @@ public class ProjectServiceImpl implements ProjectService {
 		project.setDescription(projectDTO.getDescription());
 		project.setCreatedBy(createdBy);
 
-		Project savedProject = projectRepository.save(project);
+		Set<Team> teams = new HashSet<Team>();
 
 		// Then save associated teams for project in project_team_map table
 		projectDTO.getTeamIds().parallelStream().forEachOrdered(teamId -> {
-			projectTeamMapRepository.save(new ProjectTeamMap(new ProjectTeamMapId(savedProject.getId(), teamId)));
+			teams.add(new Team(teamId));
+		});
+
+		project.setTeams(teams);
+
+		Project savedProject = projectRepository.save(project);
+
+		// Then save associated ticket types and their workflows for project in
+		// project_ticket_type_workflow_map table
+		projectDTO.getSupportedticketTypesAndTheirWorkflow().parallelStream().forEach(entry -> {
+			String[] entries = entry.split(":");
+			projectTicketTypeWorkflowMapRepository.save(new ProjectTicketTypeWorkflowMap(
+					new ProjectTicketTypeWorkflowMapId(savedProject.getId(), entries[0], Long.parseLong(entries[1]))));
 		});
 
 		return savedProject;
@@ -78,11 +97,15 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	@Override
 	public void deleteProject(Long projectId) {
-		// Delete project from project table
-		projectRepository.deleteById(projectId);
-
 		// Delete all teams for the project from project_team_map table
 		projectTeamMapRepository.deleteByProjectId(projectId);
+
+		// Delete all associated ticket types and their workflows for project in
+		// project_ticket_type_workflow_map table
+		projectTicketTypeWorkflowMapRepository.deleteByProjectId(projectId);
+
+		// Delete project from project table
+		projectRepository.deleteById(projectId);
 	}
 
 	@Transactional
@@ -91,6 +114,10 @@ public class ProjectServiceImpl implements ProjectService {
 
 		// Delete all teams for the project from project_team_map table
 		projectTeamMapRepository.deleteByProjectId(projectId);
+
+		// Delete all associated ticket types and their workflows for project in
+		// project_ticket_type_workflow_map table
+		projectTicketTypeWorkflowMapRepository.deleteByProjectId(projectId);
 
 		// Update project name and description in project table
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -101,13 +128,25 @@ public class ProjectServiceImpl implements ProjectService {
 		project.setDescription(projectDTO.getDescription());
 		project.setUpdatedBy(updatedBy);
 		project.setUpdatedOn(LocalDateTime.now());
+		Set<Team> teams = new HashSet<Team>();
 
 		// Then save associated teams for project in project_team_map table
 		projectDTO.getTeamIds().parallelStream().forEachOrdered(teamId -> {
-			projectTeamMapRepository.save(new ProjectTeamMap(new ProjectTeamMapId(projectId, teamId)));
+			teams.add(new Team(teamId));
 		});
 
+		project.setTeams(teams);
+
 		Project updatedProject = projectRepository.save(project);
+
+		// Then save associated ticket types and their workflows for project in
+		// project_ticket_type_workflow_map table
+		projectDTO.getSupportedticketTypesAndTheirWorkflow().parallelStream().forEach(entry -> {
+			String[] entries = entry.split(":");
+			projectTicketTypeWorkflowMapRepository
+					.save(new ProjectTicketTypeWorkflowMap(new ProjectTicketTypeWorkflowMapId(updatedProject.getId(),
+							entries[0], Long.parseLong(entries[1]))));
+		});
 
 		return updatedProject;
 	}

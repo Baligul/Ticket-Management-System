@@ -1,0 +1,14 @@
+2019-10-13 20:07:30.756 IST [2095] LOG:  listening on IPv6 address "::1", port 5432
+2019-10-13 20:07:30.756 IST [2095] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-10-13 20:07:30.757 IST [2095] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-10-13 20:07:30.776 IST [2096] LOG:  database system was shut down at 2019-10-13 16:00:57 IST
+2019-10-13 20:07:30.781 IST [2095] LOG:  database system is ready to accept connections
+2019-10-13 22:48:37.756 IST [7706] ERROR:  null value in column "project_id" violates not-null constraint
+2019-10-13 22:48:37.756 IST [7706] DETAIL:  Failing row contains (1, OPEN, 1, 2019-10-13 22:48:37.754, null, null).
+2019-10-13 22:48:37.756 IST [7706] STATEMENT:  insert into workflow_details (created_on, sequence, status, workflow_id) values ($1, $2, $3, $4)
+2019-10-13 22:52:53.135 IST [8206] ERROR:  null value in column "project_id" violates not-null constraint
+2019-10-13 22:52:53.135 IST [8206] DETAIL:  Failing row contains (2, OPEN, 1, 2019-10-13 22:52:53.135, null, null).
+2019-10-13 22:52:53.135 IST [8206] STATEMENT:  insert into workflow_details (created_on, sequence, status, workflow_id) values ($1, $2, $3, $4)
+2019-10-13 23:06:17.535 IST [8342] ERROR:  update or delete on table "project" violates foreign key constraint "project_ticket_type_workflow_map_project_id_fkey" on table "project_ticket_type_workflow_map"
+2019-10-13 23:06:17.535 IST [8342] DETAIL:  Key (id)=(1) is still referenced from table "project_ticket_type_workflow_map".
+2019-10-13 23:06:17.535 IST [8342] STATEMENT:  delete from project where id=$1
