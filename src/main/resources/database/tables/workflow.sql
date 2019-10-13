@@ -1,7 +1,7 @@
 CREATE TABLE workflow
 (
     id                  BIGSERIAL,
-    title               VARCHAR(256),
+    title               VARCHAR(256) UNIQUE,
     created_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by          BIGINT,
     updated_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

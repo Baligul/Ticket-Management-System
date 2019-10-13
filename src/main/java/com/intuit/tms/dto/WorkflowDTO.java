@@ -1,11 +1,9 @@
 package com.intuit.tms.dto;
 
-import java.util.SortedSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-
-import com.intuit.tms.entities.Status;
 
 public class WorkflowDTO {
 
@@ -13,7 +11,7 @@ public class WorkflowDTO {
 	@NotNull
 	private String title;
 
-	private SortedSet<Status> statuses;
+	private Set<String> statuses;
 
 	// Getters and Setters
 	// ===================
@@ -25,11 +23,11 @@ public class WorkflowDTO {
 		this.title = title;
 	}
 
-	public SortedSet<Status> getStatuses() {
+	public Set<String> getStatuses() {
 		return statuses;
 	}
 
-	public void setStatuses(SortedSet<Status> statuses) {
+	public void setStatuses(Set<String> statuses) {
 		this.statuses = statuses;
 	}
 }

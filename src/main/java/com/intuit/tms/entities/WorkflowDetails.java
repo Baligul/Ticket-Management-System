@@ -1,52 +1,43 @@
 package com.intuit.tms.entities;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "workflow_details")
-public class WorkflowDetails extends BaseEntity {
-	@Column(name = "workflow_id")
-	private Long workflowId;
+public class WorkflowDetails extends BaseEntityWithoutId {
 
-	private String status;
+	@EmbeddedId
+	private WorkflowDetailsId workflowDetailsId;
 
-	private Integer sequence;
+	private int sequence;
 
 	protected WorkflowDetails() {
-	}
-
-	public WorkflowDetails(Long workflowId, String status) {
-		super();
-		this.workflowId = workflowId;
-		this.status = status;
 	}
 
 	// Getters and Setters
 	// ===================
 
-	public Long getWorkflowId() {
-		return workflowId;
+	public WorkflowDetails(WorkflowDetailsId workflowDetailsId, int sequence) {
+		super();
+		this.workflowDetailsId = workflowDetailsId;
+		this.sequence = sequence;
 	}
 
-	public void setWorkflowId(Long workflowId) {
-		this.workflowId = workflowId;
+	public WorkflowDetailsId getWorkflowDetailsId() {
+		return workflowDetailsId;
 	}
 
-	public String getStatus() {
-		return status;
+	public void setWorkflowDetailsId(WorkflowDetailsId workflowDetailsId) {
+		this.workflowDetailsId = workflowDetailsId;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Integer getSequence() {
+	public int getSequence() {
 		return sequence;
 	}
 
-	public void setSequence(Integer sequence) {
+	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
 }
