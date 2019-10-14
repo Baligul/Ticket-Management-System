@@ -3,7 +3,7 @@ package com.intuit.tms.services;
 import com.intuit.tms.entities.Account;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import com.intuit.tms.dto.AccountRegistrationDTO;
 
@@ -12,7 +12,7 @@ public interface AccountService {
 
 	Account save(AccountRegistrationDTO registration, Long teamId);
 
-	Map<Long, Account> getAllAccounts();
+	Set<Account> getAllAccounts();
 
 	List<Account> getAccountByTeams(Long teamId);
 

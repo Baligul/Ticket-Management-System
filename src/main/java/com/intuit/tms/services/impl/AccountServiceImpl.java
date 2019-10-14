@@ -1,10 +1,10 @@
 package com.intuit.tms.services.impl;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Account;
 import com.intuit.tms.entities.AccountRoleMap;
+import com.intuit.tms.entities.AccountRoleMapId;
 import com.intuit.tms.entities.AccountTeamMap;
+import com.intuit.tms.entities.AccountTeamMapId;
 import com.intuit.tms.entities.Team;
 import com.intuit.tms.repositories.AccountRepository;
 import com.intuit.tms.repositories.AccountRoleMapRepository;
@@ -63,8 +65,8 @@ public class AccountServiceImpl implements AccountService {
 
 		Account saveAccount = accountRepository.save(account);
 
-		accountRoleMapRepository.save(new AccountRoleMap(saveAccount.getId(), 2L));
-		accountTeamMapRepository.save(new AccountTeamMap(saveAccount.getId(), teamId));
+		accountRoleMapRepository.save(new AccountRoleMap(new AccountRoleMapId(saveAccount.getId(), 1L)));
+		accountTeamMapRepository.save(new AccountTeamMap(new AccountTeamMapId(saveAccount.getId(), teamId)));
 
 		account.setCreatedBy(customUserDetailsService.getCurrentLoggedInUserId());
 
@@ -72,14 +74,14 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public Map<Long, Account> getAllAccounts() {
+	public Set<Account> getAllAccounts() {
 		List<Team> teams = teamRepository.findAll();
-		Map<Long, Account> accounts = new HashMap<Long, Account>();
+		Set<Account> accounts = new HashSet<Account>();
 
 		teams.parallelStream().forEach(team -> {
 			accountRepository.findDistinctByTeams_Id(team.getId()).parallelStream().forEach(account -> {
-				if (!accounts.containsKey(account.getId()))
-					accounts.put(account.getId(), account);
+				if (!accounts.contains(account))
+					accounts.add(account);
 			});
 
 		});

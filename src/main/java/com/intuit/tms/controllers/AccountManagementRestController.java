@@ -1,7 +1,7 @@
 package com.intuit.tms.controllers;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -76,7 +76,7 @@ public class AccountManagementRestController {
 	public ResponseEntity<Object> getAllAccounts() {
 
 		try {
-			Map<Long, Account> accounts = accountService.getAllAccounts();
+			Set<Account> accounts = accountService.getAllAccounts();
 			return new ResponseEntity<Object>(accounts, HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<Object>("Couldn't get list of accounts, Reason: " + ex.getMessage(),

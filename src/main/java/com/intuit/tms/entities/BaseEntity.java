@@ -20,7 +20,7 @@ public class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "created_on", columnDefinition = "CURRENT_TIMESTAMP", updatable = false)
+	@Column(name = "created_on", updatable = false)
 	private LocalDateTime createdOn;
 
 	@Transient

@@ -1,43 +1,32 @@
 package com.intuit.tms.entities;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "account_team_map")
-public class AccountTeamMap extends BaseEntity {
-	@Column(name = "account_id")
-	private Long accountId;
+public class AccountTeamMap extends BaseEntityWithoutId {
 
-	@Column(name = "team_id")
-	private Long teamId;
+	@EmbeddedId
+	private AccountTeamMapId accountTeamMapId;
 
 	protected AccountTeamMap() {
 	}
 
-	public AccountTeamMap(Long accountId, Long teamId) {
+	public AccountTeamMap(AccountTeamMapId accountTeamMapId) {
 		super();
-		this.accountId = accountId;
-		this.teamId = teamId;
+		this.accountTeamMapId = accountTeamMapId;
 	}
 
 	// Getters and Setters
 	// ===================
 
-	public Long getAccountId() {
-		return accountId;
+	public AccountTeamMapId getAccountTeamMapId() {
+		return accountTeamMapId;
 	}
 
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
-	}
-
-	public Long getTeamId() {
-		return teamId;
-	}
-
-	public void setTeamId(Long teamId) {
-		this.teamId = teamId;
+	public void setAccountTeamMapId(AccountTeamMapId accountTeamMapId) {
+		this.accountTeamMapId = accountTeamMapId;
 	}
 }

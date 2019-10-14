@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class BaseEntityWithoutId {
 	private static final Logger log = LoggerFactory.getLogger(BaseEntityWithoutId.class);
 
-	@Column(name = "created_on", columnDefinition = "CURRENT_TIMESTAMP", updatable = false)
+	@Column(name = "created_on", updatable = false)
 	private LocalDateTime createdOn;
 
 	@Transient
