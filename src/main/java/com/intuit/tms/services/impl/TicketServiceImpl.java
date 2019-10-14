@@ -59,12 +59,22 @@ public class TicketServiceImpl implements TicketService {
 
 				// If priority is specified in filter, add equal where clause
 				if (filter.getPriority() != null) {
-					predicates.add(cb.equal(root.get("priority"), filter.getPriority()));
+					predicates.add(cb.equal(root.get("priority"), filter.getPriority().getValue()));
 				}
 
-				// If priority is specified in filter, add equal where clause
+				// If ticket type is specified in filter, add equal where clause
 				if (filter.getTicketType() != null) {
-					predicates.add(cb.equal(root.get("ticketType"), filter.getTicketType()));
+					predicates.add(cb.equal(root.get("ticketType"), filter.getTicketType().getTicketType()));
+				}
+
+				// If ticket resolution is specified in filter, add equal where clause
+				if (filter.getTicketType() != null) {
+					predicates.add(cb.equal(root.get("resolution"), filter.getResolution().getValue()));
+				}
+
+				// If status is specified in filter, add equal where clause
+				if (filter.getTicketType() != null) {
+					predicates.add(cb.equal(root.get("status"), filter.getStatus().getStatus()));
 				}
 
 				return cb.and(predicates.toArray(new Predicate[0]));
