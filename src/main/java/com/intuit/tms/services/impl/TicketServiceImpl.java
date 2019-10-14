@@ -16,7 +16,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.intuit.tms.entities.Account;
+import com.intuit.tms.entities.Project;
+import com.intuit.tms.entities.Status;
 import com.intuit.tms.entities.Ticket;
+import com.intuit.tms.entities.TicketType;
+import com.intuit.tms.enums.TicketPriorityEnum;
+import com.intuit.tms.enums.TicketResolutionEnum;
 import com.intuit.tms.repositories.TicketRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.TicketService;
@@ -83,8 +89,42 @@ public class TicketServiceImpl implements TicketService {
 		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
 		Ticket ticket = new Ticket();
 
+		// TODO: Here we will also write validation whether user is a valid user and
+		// also have
+		// privileges to be assigned to this project
+		if (ticketDTO.getAssignee() != null) {
+			ticket.setAssignee(new Account(ticketDTO.getAssignee()));
+		} else {
+			// Mocking the user 2 (user@intuit.com) to be assigned
+			// TODO: Here we need to write the login to get the available user to be
+			// assigned for this ticket among the users/teams associated to this project
+			ticket.setAssignee(new Account(2L));
+		}
+
+		// TODO: We need to write a logic to convert the input date in LocalDateTime
+		// format, for now mocking as current Date
+		ticket.setDueDate(LocalDateTime.now());
+
+		// TODO: We need to implement a logic to calculate the priority based on
+		// severity and impact
+		ticket.setPriority(TicketPriorityEnum.getByValue(ticketDTO.getPriority()));
+		ticket.setResolution(TicketResolutionEnum.getByValue(ticketDTO.getResolution()));
+		ticket.setStatus(new Status(ticketDTO.getStatus()));
+
+		// TODO: Here we need to write the logic for validating a project also whether a
+		// project support the current ticket type, etc
+		// Mocking project
+		ticket.setProject(new Project(ticketDTO.getProjectId()));
+
+		ticket.setSummary(ticketDTO.getSummary());
+
+		// TODO: Here we need to check whether a project support this ticket type also,
+		// validate whether this ticket type exists
+		// Mocking ticket type
+		ticket.setTicketType(new TicketType(ticketDTO.getTicketType()));
 		ticket.setDescription(ticketDTO.getDescription());
 		ticket.setCreatedBy(createdBy);
+
 		return ticketRepository.save(ticket);
 	}
 
@@ -99,8 +139,44 @@ public class TicketServiceImpl implements TicketService {
 		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
 		Ticket ticket = new Ticket();
 
+		// TODO: Here we will also write validation whether user is a valid user and
+		// also have
+		// privileges to be assigned to this project
+		if (ticketDTO.getAssignee() != null) {
+			ticket.setAssignee(new Account(ticketDTO.getAssignee()));
+		} else {
+			// Mocking the user 2 (user@intuit.com) to be assigned
+			// TODO: Here we need to write the login to get the available user to be
+			// assigned for this ticket among the users/teams associated to this project
+			ticket.setAssignee(new Account(2L));
+		}
+
+		// TODO: We need to write a logic to convert the input date in LocalDateTime
+		// format, for now mocking as current Date
+		ticket.setDueDate(LocalDateTime.now());
+
+		// TODO: We need to implement a logic to calculate the priority based on
+		// severity and impact
+		ticket.setPriority(TicketPriorityEnum.getByValue(ticketDTO.getPriority()));
+		ticket.setResolution(TicketResolutionEnum.getByValue(ticketDTO.getResolution()));
+		ticket.setStatus(new Status(ticketDTO.getStatus()));
+
+		// TODO: Here we need to write the logic for validating a project also whether a
+		// project support the current ticket type, etc
+		// Mocking project
+		ticket.setProject(new Project(ticketDTO.getProjectId()));
+
+		ticket.setSummary(ticketDTO.getSummary());
+
+		// TODO: Here we need to check whether a project support this ticket type also,
+		// validate whether this ticket type exists
+		// Mocking ticket type
+		ticket.setTicketType(new TicketType(ticketDTO.getTicketType()));
+		ticket.setDescription(ticketDTO.getDescription());
+
 		ticket.setUpdatedBy(updatedBy);
 		ticket.setUpdatedOn(LocalDateTime.now());
+
 		return ticketRepository.save(ticket);
 	}
 

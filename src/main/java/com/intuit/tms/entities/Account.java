@@ -96,6 +96,10 @@ public class Account extends BaseEntity {
 	public Account() {
 	}
 
+	public Account(Long id) {
+		this.setId(id);
+	}
+
 	public Account(@NotNull String name, @NotNull String username,
 			@NotNull @Email(message = "{errors.invalid_email}") String email, Set<Role> roles, Set<Team> teams,
 			@NotNull @Pattern(regexp = "(^$|[0-9]{10})") String mobilePhone,

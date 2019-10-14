@@ -26,6 +26,10 @@ public class Status extends BaseEntityWithoutId {
 
 	public Status() {
 	}
+	
+	public Status(String status) {
+		this.setStatus(status);
+	}
 
 	public Status(String status, String description, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
 		super();

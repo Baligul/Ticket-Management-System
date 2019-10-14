@@ -17,15 +17,13 @@ public class TicketDTO {
 	@NotNull
 	private String summary;
 
-	private Integer priority;
+	private String priority;
 
 	private Long assignee;
 
-	private Integer severity;
-
 	private LocalDateTime dueDate;
 
-	private Integer resolution;
+	private String resolution;
 
 	private String status;
 
@@ -64,11 +62,11 @@ public class TicketDTO {
 		this.summary = summary;
 	}
 
-	public Integer getPriority() {
+	public String getPriority() {
 		return priority;
 	}
 
-	public void setPriority(Integer priority) {
+	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 
@@ -80,14 +78,6 @@ public class TicketDTO {
 		this.assignee = assignee;
 	}
 
-	public Integer getSeverity() {
-		return severity;
-	}
-
-	public void setSeverity(Integer severity) {
-		this.severity = severity;
-	}
-
 	public LocalDateTime getDueDate() {
 		return dueDate;
 	}
@@ -96,11 +86,11 @@ public class TicketDTO {
 		this.dueDate = dueDate;
 	}
 
-	public Integer getResolution() {
+	public String getResolution() {
 		return resolution;
 	}
 
-	public void setResolution(Integer resolution) {
+	public void setResolution(String resolution) {
 		this.resolution = resolution;
 	}
 

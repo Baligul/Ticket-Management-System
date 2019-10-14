@@ -40,6 +40,10 @@ public class Project extends BaseEntity {
 	public Project() {
 	}
 
+	public Project(Long id) {
+		this.setId(id);
+	}
+
 	public Project(@NotNull String name, String description, Set<Team> teams, Long createdBy, LocalDateTime updatedOn,
 			Long updatedBy) {
 		super();

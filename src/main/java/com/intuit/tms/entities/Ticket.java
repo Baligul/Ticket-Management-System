@@ -7,6 +7,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.intuit.tms.enums.TicketPriorityEnum;
+import com.intuit.tms.enums.TicketResolutionEnum;
+
 @Entity
 @Table(name = "ticket")
 public class Ticket extends BaseEntity {
@@ -21,18 +24,16 @@ public class Ticket extends BaseEntity {
 
 	private String description;
 	private String summary;
-	private Integer priority;
+	private TicketPriorityEnum priority;
 
 	@ManyToOne()
 	@JoinColumn(name = "assignee")
 	private Account assignee;
 
-	private Integer severity;
-
 	@Column(name = "due_date")
 	private LocalDateTime dueDate;
 
-	private Integer resolution;
+	private TicketResolutionEnum resolution;
 
 	@ManyToOne()
 	@JoinColumn(name = "status")
@@ -50,9 +51,9 @@ public class Ticket extends BaseEntity {
 	public Ticket() {
 	}
 
-	public Ticket(Project project, TicketType ticketType, String description, String summary, Integer priority,
-			Account assignee, Integer severity, LocalDateTime dueDate, Integer resolution, Status status,
-			Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
+	public Ticket(Project project, TicketType ticketType, String description, String summary,
+			TicketPriorityEnum priority, Account assignee, LocalDateTime dueDate, TicketResolutionEnum resolution,
+			Status status, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
 		super();
 		this.project = project;
 		this.ticketType = ticketType;
@@ -60,7 +61,6 @@ public class Ticket extends BaseEntity {
 		this.summary = summary;
 		this.priority = priority;
 		this.assignee = assignee;
-		this.severity = severity;
 		this.dueDate = dueDate;
 		this.resolution = resolution;
 		this.status = status;
@@ -104,11 +104,11 @@ public class Ticket extends BaseEntity {
 		this.summary = summary;
 	}
 
-	public Integer getPriority() {
+	public TicketPriorityEnum getPriority() {
 		return priority;
 	}
 
-	public void setPriority(Integer priority) {
+	public void setPriority(TicketPriorityEnum priority) {
 		this.priority = priority;
 	}
 
@@ -120,14 +120,6 @@ public class Ticket extends BaseEntity {
 		this.assignee = assignee;
 	}
 
-	public Integer getSeverity() {
-		return severity;
-	}
-
-	public void setSeverity(Integer severity) {
-		this.severity = severity;
-	}
-
 	public LocalDateTime getDueDate() {
 		return dueDate;
 	}
@@ -136,11 +128,11 @@ public class Ticket extends BaseEntity {
 		this.dueDate = dueDate;
 	}
 
-	public Integer getResolution() {
+	public TicketResolutionEnum getResolution() {
 		return resolution;
 	}
 
-	public void setResolution(Integer resolution) {
+	public void setResolution(TicketResolutionEnum resolution) {
 		this.resolution = resolution;
 	}
 

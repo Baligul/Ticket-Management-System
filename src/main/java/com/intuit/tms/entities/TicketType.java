@@ -28,6 +28,10 @@ public class TicketType extends BaseEntityWithoutId {
 	public TicketType() {
 	}
 
+	public TicketType(String ticketType) {
+		this.setTicketType(ticketType);
+	}
+
 	public TicketType(String ticketType, String description, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {
 		super();
 		this.ticketType = ticketType;
