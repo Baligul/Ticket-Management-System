@@ -21,6 +21,7 @@ import com.intuit.tms.entities.Ticket;
 import com.intuit.tms.entities.TicketType;
 import com.intuit.tms.enums.TicketPriorityEnum;
 import com.intuit.tms.enums.TicketResolutionEnum;
+import com.intuit.tms.repositories.AccountRepository;
 import com.intuit.tms.repositories.TicketRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
 import com.intuit.tms.services.TicketService;
@@ -34,6 +35,9 @@ public class TicketServiceImpl implements TicketService {
 
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
+
+	@Autowired
+	AccountRepository accountRepository;
 
 	@SuppressWarnings("serial")
 	@Override
@@ -148,7 +152,7 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public Ticket updateTicket(TicketDTO ticketDTO, Long ticketId) {
 		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
-		Ticket ticket = new Ticket();
+		Ticket ticket = new Ticket(ticketId);
 
 		// TODO: Here we will also write validation whether user is a valid user and
 		// also have
@@ -193,6 +197,36 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public void deleteTicket(Long ticketId) {
+		// TODO: Only the person who created a ticket or admin can delete the ticket
 		ticketRepository.deleteById(ticketId);
+	}
+
+	@Override
+	public void updateTicketStatus(String status, Long ticketId) {
+		// TODO Only the person who are having authorities to work on project /ticket
+		// can change the status
+		ticketRepository.findById(ticketId).get().setStatus(new Status(status));
+	}
+
+	@Override
+	public void updateTicketResolution(String resolution, Long ticketId) {
+		// TODO Only the person who are having authorities to work on project /ticket
+		// can change the resolution
+		ticketRepository.findById(ticketId).get().setResolution(TicketResolutionEnum.getByValue(resolution));
+	}
+
+	@Override
+	public void updateTicketAssignee(Long assignee, Long ticketId) {
+		// TODO: Here we will also write validation whether user is a valid user and
+		// also have
+		// privileges to be assigned to this project
+		ticketRepository.findById(ticketId).get().setAssignee(accountRepository.findById(assignee).get());
+	}
+
+	@Override
+	public void updateTicketPriority(String priority, Long ticketId) {
+		// TODO Only the person who are having authorities to work on project /ticket
+		// can change the priority
+		ticketRepository.findById(ticketId).get().setPriority(TicketPriorityEnum.getByValue(priority));
 	}
 }

@@ -115,4 +115,82 @@ public class TicketManagementRestController {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@PutMapping("/api/v1/ticket/{ticketId}/status")
+	public ResponseEntity<Object> updateTicketStatus(@PathVariable(name = "ticketId") Long ticketId, String status) {
+
+		Ticket existing = ticketService.getTicketById(ticketId);
+		if (existing == null) {
+			return new ResponseEntity<Object>("The ticket with ticket id as " + ticketId + " is not found",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			ticketService.updateTicketStatus(status, ticketId);
+			return new ResponseEntity<Object>("The status of the ticket with ticket id " + ticketId
+					+ " have been successfully updated as " + status, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket status cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping("/api/v1/ticket/{ticketId}/resolution")
+	public ResponseEntity<Object> updateTicketResolution(@PathVariable(name = "ticketId") Long ticketId,
+			String resolution) {
+
+		Ticket existing = ticketService.getTicketById(ticketId);
+		if (existing == null) {
+			return new ResponseEntity<Object>("The ticket with ticket id as " + ticketId + " is not found",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			ticketService.updateTicketResolution(resolution, ticketId);
+			return new ResponseEntity<Object>("The resolution of the ticket with ticket id " + ticketId
+					+ " have been successfully updated as " + resolution, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket resolution cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping("/api/v1/ticket/{ticketId}/assignee")
+	public ResponseEntity<Object> updateTicketAssignee(@PathVariable(name = "ticketId") Long ticketId, Long assignee) {
+
+		Ticket existing = ticketService.getTicketById(ticketId);
+		if (existing == null) {
+			return new ResponseEntity<Object>("The ticket with ticket id as " + ticketId + " is not found",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			ticketService.updateTicketAssignee(assignee, ticketId);
+			return new ResponseEntity<Object>("The assignee for the ticket with ticket id " + ticketId
+					+ " have been successfully updated as " + assignee, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket assignee cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping("/api/v1/ticket/{ticketId}/priority")
+	public ResponseEntity<Object> updateTicketPriority(@PathVariable(name = "ticketId") Long ticketId,
+			String priority) {
+
+		Ticket existing = ticketService.getTicketById(ticketId);
+		if (existing == null) {
+			return new ResponseEntity<Object>("The ticket with ticket id as " + ticketId + " is not found",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			ticketService.updateTicketPriority(priority, ticketId);
+			return new ResponseEntity<Object>("The priority for the ticket with ticket id " + ticketId
+					+ " have been successfully updated as " + priority, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket priority cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -18,4 +18,12 @@ public interface TicketService {
 	Ticket updateTicket(TicketDTO ticketDTO, Long ticketId);
 
 	void deleteTicket(Long ticketId);
+
+	void updateTicketStatus(String status, Long ticketId);
+
+	void updateTicketResolution(String resolution, Long ticketId);
+
+	void updateTicketAssignee(Long assignee, Long ticketId);
+
+	void updateTicketPriority(String priority, Long ticketId);
 }
