@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.intuit.tms.dto.TeamDTO;
 import com.intuit.tms.entities.Team;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TeamService;
 
 @RestController
@@ -25,6 +26,9 @@ public class TeamManagementRestController {
 
 	@Autowired
 	private TeamService teamService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("team")
 	public TeamDTO teamDTO() {
@@ -41,13 +45,16 @@ public class TeamManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		teamService.saveTeam(teamDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a team", HttpStatus.OK);
-
+		try {
+			teamService.saveTeam(teamDTO);
+			return new ResponseEntity<Object>("You have successfully added a team", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Team cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/admin/api/v1/teams")
@@ -56,8 +63,9 @@ public class TeamManagementRestController {
 		try {
 			List<Team> teams = teamService.getAllTeams();
 			return new ResponseEntity<Object>(teams, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Teams cannot be fetched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -72,12 +80,17 @@ public class TeamManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		teamService.updateTeam(teamDTO, teamId);
-
-		return new ResponseEntity<Object>("You have successfully updated a team with team id " + teamId, HttpStatus.OK);
+		try {
+			teamService.updateTeam(teamDTO, teamId);
+			return new ResponseEntity<Object>("You have successfully updated a team with team id " + teamId,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Team cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("/admin/api/v1/team/{teamId}")
@@ -91,9 +104,10 @@ public class TeamManagementRestController {
 
 		try {
 			teamService.deleteTeam(teamId);
-			return new ResponseEntity<Object>("team successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Team successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Team cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }

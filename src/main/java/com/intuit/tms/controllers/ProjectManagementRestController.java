@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.intuit.tms.dto.ProjectDTO;
 import com.intuit.tms.entities.Project;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.ProjectService;
 
 @RestController
@@ -25,6 +26,9 @@ public class ProjectManagementRestController {
 
 	@Autowired
 	private ProjectService projectService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("project")
 	public ProjectDTO projectDTO() {
@@ -42,13 +46,16 @@ public class ProjectManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		projectService.saveProject(projectDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a project", HttpStatus.OK);
-
+		try {
+			projectService.saveProject(projectDTO);
+			return new ResponseEntity<Object>("You have successfully added a project", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Project cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/admin/api/v1/projects")
@@ -57,8 +64,9 @@ public class ProjectManagementRestController {
 		try {
 			List<Project> projects = projectService.getAllProjects();
 			return new ResponseEntity<Object>(projects, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Cannot get the projects, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -73,13 +81,17 @@ public class ProjectManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		projectService.updateProject(projectDTO, projectId);
-
-		return new ResponseEntity<Object>("You have successfully updated a project with project id " + projectId,
-				HttpStatus.OK);
+		try {
+			projectService.updateProject(projectDTO, projectId);
+			return new ResponseEntity<Object>("You have successfully updated a project with project id " + projectId,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Project cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("/admin/api/v1/project/{projectId}")
@@ -93,9 +105,10 @@ public class ProjectManagementRestController {
 
 		try {
 			projectService.deleteProject(projectId);
-			return new ResponseEntity<Object>("project successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Project successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Project cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }

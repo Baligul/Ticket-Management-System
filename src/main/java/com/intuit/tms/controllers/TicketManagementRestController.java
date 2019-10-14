@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.intuit.tms.dto.TicketDTO;
 import com.intuit.tms.entities.Ticket;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TicketService;
 
 @RestController
@@ -26,6 +27,9 @@ public class TicketManagementRestController {
 
 	@Autowired
 	private TicketService ticketService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("ticket")
 	public TicketDTO ticketDTO() {
@@ -36,13 +40,16 @@ public class TicketManagementRestController {
 	public ResponseEntity<Object> saveTicket(@ModelAttribute("ticket") @Valid TicketDTO ticketDTO,
 			BindingResult result) {
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		ticketService.saveTicket(ticketDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a ticket", HttpStatus.OK);
-
+		try {
+			ticketService.saveTicket(ticketDTO);
+			return new ResponseEntity<Object>("You have successfully added a ticket", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/api/v1/tickets")
@@ -50,8 +57,9 @@ public class TicketManagementRestController {
 		try {
 			List<Ticket> tickets = ticketService.getAllTickets();
 			return new ResponseEntity<Object>(tickets, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Tickets cannot be fetched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -66,13 +74,17 @@ public class TicketManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		ticketService.updateTicket(ticketDTO, ticketId);
-
-		return new ResponseEntity<Object>("You have successfully updated a ticket with ticket id " + ticketId,
-				HttpStatus.OK);
+		try {
+			ticketService.updateTicket(ticketDTO, ticketId);
+			return new ResponseEntity<Object>("You have successfully updated a ticket with ticket id " + ticketId,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("/api/v1/ticket/{ticketId}")
@@ -86,14 +98,21 @@ public class TicketManagementRestController {
 
 		try {
 			ticketService.deleteTicket(ticketId);
-			return new ResponseEntity<Object>("ticket successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Ticket successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PostMapping("/api/v1/ticket/search")
 	public ResponseEntity<Object> searchTickets(@RequestBody Ticket ticket) {
-		return new ResponseEntity<Object>(ticketService.serachTickets(ticket), HttpStatus.OK);
+		try {
+			List<Ticket> searchedTickets = ticketService.serachTickets(ticket);
+			return new ResponseEntity<Object>(searchedTickets, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket cannot be searched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.intuit.tms.dto.WorkflowDTO;
 import com.intuit.tms.entities.Workflow;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.WorkflowService;
 
 @RestController
@@ -25,6 +26,9 @@ public class WorkflowManagementRestController {
 
 	@Autowired
 	private WorkflowService workflowService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("workflow")
 	public WorkflowDTO workflowDTO() {
@@ -43,13 +47,16 @@ public class WorkflowManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		workflowService.saveWorkflow(workflowDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a workflow", HttpStatus.OK);
-
+		try {
+			workflowService.saveWorkflow(workflowDTO);
+			return new ResponseEntity<Object>("You have successfully added a workflow", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Workflow cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/admin/api/v1/workflows")
@@ -58,8 +65,9 @@ public class WorkflowManagementRestController {
 		try {
 			List<Workflow> workflows = workflowService.getAllWorkflows();
 			return new ResponseEntity<Object>(workflows, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Workflows cannot be fetched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -74,13 +82,17 @@ public class WorkflowManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		workflowService.updateWorkflow(workflowDTO, workflowId);
-
-		return new ResponseEntity<Object>("You have successfully updated a workflow with workflow id " + workflowId,
-				HttpStatus.OK);
+		try {
+			workflowService.updateWorkflow(workflowDTO, workflowId);
+			return new ResponseEntity<Object>("You have successfully updated a workflow with workflow id " + workflowId,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Workflow cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("/admin/api/v1/workflow/{workflowId}")
@@ -94,9 +106,10 @@ public class WorkflowManagementRestController {
 
 		try {
 			workflowService.deleteWorkflow(workflowId);
-			return new ResponseEntity<Object>("workflow successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Workflow successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Workflow cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }

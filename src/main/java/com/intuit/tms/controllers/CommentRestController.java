@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intuit.tms.dto.CommentDTO;
 import com.intuit.tms.entities.Comment;
 import com.intuit.tms.services.CommentService;
+import com.intuit.tms.services.ErrorBuilderService;
 
 @RestController
 public class CommentRestController {
 
 	@Autowired
 	private CommentService commentService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("comment")
 	public CommentDTO commentDTO() {
@@ -36,13 +40,16 @@ public class CommentRestController {
 			BindingResult result, @PathVariable(name = "ticketId") Long ticketId) {
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		commentService.saveComment(commentDTO, ticketId);
-
-		return new ResponseEntity<Object>("You have successfully added a comment", HttpStatus.OK);
-
+		try {
+			commentService.saveComment(commentDTO, ticketId);
+			return new ResponseEntity<Object>("You have successfully added a comment", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Comment cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/api/v1/comments/tickets/{ticketId}")
@@ -51,8 +58,9 @@ public class CommentRestController {
 		try {
 			List<Comment> comments = commentService.getCommentsByTicketId(ticketId);
 			return new ResponseEntity<Object>(comments, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Comments cannot be fetched for tikets, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -63,8 +71,9 @@ public class CommentRestController {
 		try {
 			List<Comment> comments = commentService.getCommentsByUserOnTicket(userId, ticketId);
 			return new ResponseEntity<Object>(comments, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>(
+					"Comments by user for ticket cannot be fetched, Reason: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -79,13 +88,17 @@ public class CommentRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		commentService.updateComment(commentDTO, commentId);
-
-		return new ResponseEntity<Object>("You have successfully updated a comment with comment id " + commentId,
-				HttpStatus.OK);
+		try {
+			commentService.updateComment(commentDTO, commentId);
+			return new ResponseEntity<Object>("You have successfully updated a comment with comment id " + commentId,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Comments cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@DeleteMapping("/api/v1/comment/{commentId}")
@@ -99,9 +112,10 @@ public class CommentRestController {
 
 		try {
 			commentService.deleteComment(commentId);
-			return new ResponseEntity<Object>("comment successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Comment successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Comments cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }

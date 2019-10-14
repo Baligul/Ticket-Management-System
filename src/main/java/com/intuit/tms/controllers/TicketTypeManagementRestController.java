@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intuit.tms.dto.TicketTypeDTO;
 import com.intuit.tms.dto.TicketTypeUpdateDTO;
 import com.intuit.tms.entities.TicketType;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TicketTypeService;
 
 @RestController
@@ -27,6 +28,9 @@ public class TicketTypeManagementRestController {
 
 	@Autowired
 	private TicketTypeService ticketTypeService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("ticketType")
 	public TicketTypeDTO ticketTypeDTO() {
@@ -49,13 +53,16 @@ public class TicketTypeManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		ticketTypeService.saveTicketType(ticketTypeDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a ticketType", HttpStatus.OK);
-
+		try {
+			ticketTypeService.saveTicketType(ticketTypeDTO);
+			return new ResponseEntity<Object>("You have successfully added a ticketType", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket type cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/admin/api/v1/ticketTypes")
@@ -64,8 +71,9 @@ public class TicketTypeManagementRestController {
 		try {
 			List<TicketType> ticketTypes = ticketTypeService.getAllTicketTypes();
 			return new ResponseEntity<Object>(ticketTypes, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket types cannot be fetched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -80,13 +88,17 @@ public class TicketTypeManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		ticketTypeService.updateTicketType(ticketTypeUpdateDTO, strTicketType);
-
-		return new ResponseEntity<Object>("You have successfully updated a ticketType as " + strTicketType,
-				HttpStatus.OK);
+		try {
+			ticketTypeService.updateTicketType(ticketTypeUpdateDTO, strTicketType);
+			return new ResponseEntity<Object>("You have successfully updated a ticketType as " + strTicketType,
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket type cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@Transactional
@@ -101,9 +113,10 @@ public class TicketTypeManagementRestController {
 
 		try {
 			ticketTypeService.deleteTicketType(strTicketType);
-			return new ResponseEntity<Object>("ticketType successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Ticket type successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Ticket type cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }

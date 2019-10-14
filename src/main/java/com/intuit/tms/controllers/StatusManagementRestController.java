@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intuit.tms.dto.StatusDTO;
 import com.intuit.tms.dto.StatusUpdateDTO;
 import com.intuit.tms.entities.Status;
+import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.StatusService;
 
 @RestController
@@ -27,6 +28,9 @@ public class StatusManagementRestController {
 
 	@Autowired
 	private StatusService statusService;
+
+	@Autowired
+	private ErrorBuilderService errorBuilderService;
 
 	@ModelAttribute("status")
 	public StatusDTO statusDTO() {
@@ -49,13 +53,16 @@ public class StatusManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		statusService.saveStatus(statusDTO);
-
-		return new ResponseEntity<Object>("You have successfully added a status", HttpStatus.OK);
-
+		try {
+			statusService.saveStatus(statusDTO);
+			return new ResponseEntity<Object>("You have successfully added a status", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Status cannot be saved, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/admin/api/v1/statuses")
@@ -64,8 +71,9 @@ public class StatusManagementRestController {
 		try {
 			List<Status> statuss = statusService.getAllStatuses();
 			return new ResponseEntity<Object>(statuss, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Cannot ftech the statuses, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -79,12 +87,16 @@ public class StatusManagementRestController {
 		}
 
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(errorBuilderService.generateErrorMessage(result), HttpStatus.BAD_REQUEST);
 		}
 
-		statusService.updateStatus(statusUpdateDTO, strStatus);
-
-		return new ResponseEntity<Object>("You have successfully updated a status as " + strStatus, HttpStatus.OK);
+		try {
+			statusService.updateStatus(statusUpdateDTO, strStatus);
+			return new ResponseEntity<Object>("You have successfully updated a status as " + strStatus, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Status cannot be updated, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@Transactional
@@ -98,9 +110,10 @@ public class StatusManagementRestController {
 
 		try {
 			statusService.deleteStatus(strStatus);
-			return new ResponseEntity<Object>("status successfully deleted", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>("Status successfully deleted", HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Object>("Status cannot be deleted, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 }
