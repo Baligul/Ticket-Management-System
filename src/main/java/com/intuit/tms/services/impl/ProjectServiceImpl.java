@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,8 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project saveProject(ProjectDTO projectDTO) {
 
 		// First save project details in project table
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Project project = new Project();
 		project.setName(projectDTO.getName());
 		project.setDescription(projectDTO.getDescription());
@@ -120,8 +117,7 @@ public class ProjectServiceImpl implements ProjectService {
 		projectTicketTypeWorkflowMapRepository.deleteByProjectId(projectId);
 
 		// Update project name and description in project table
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Project project = new Project();
 		project.setId(projectId);
 		project.setName(projectDTO.getName());

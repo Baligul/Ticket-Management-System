@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Status;
@@ -40,8 +38,7 @@ public class StatusServiceImpl implements StatusService {
 
 	@Override
 	public Status saveStatus(StatusDTO statusDTO) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Status status = new Status();
 		status.setStatus(statusDTO.getStatus());
 		status.setDescription(statusDTO.getDescription());
@@ -62,8 +59,7 @@ public class StatusServiceImpl implements StatusService {
 
 	@Override
 	public Status updateStatus(StatusUpdateDTO statusUpdateDTO, String status) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Status updatedStatus = new Status();
 		updatedStatus.setStatus(status);
 		updatedStatus.setDescription(statusUpdateDTO.getDescription());

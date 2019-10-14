@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Team;
@@ -49,8 +47,7 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public Team saveTeam(TeamDTO teamDTO) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Team team = new Team();
 		team.setName(teamDTO.getName());
 		team.setTeamType(TeamTypeEnum.getByValue(teamDTO.getTeamType()));
@@ -72,8 +69,7 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public Team updateTeam(TeamDTO teamDTO, Long teamId) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Team team = new Team();
 		team.setId(teamId);
 		team.setName(teamDTO.getName());

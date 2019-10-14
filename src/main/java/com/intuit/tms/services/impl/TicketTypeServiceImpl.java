@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.TicketType;
@@ -40,8 +38,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
 	@Override
 	public TicketType saveTicketType(TicketTypeDTO ticketTypeDTO) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		TicketType ticketType = new TicketType();
 		ticketType.setTicketType(ticketTypeDTO.getTicketType());
 		ticketType.setDescription(ticketTypeDTO.getDescription());
@@ -61,8 +58,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
 	@Override
 	public TicketType updateTicketType(TicketTypeUpdateDTO ticketTypeUpdateDTO, String strTicketType) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		TicketType ticketType = new TicketType();
 		ticketType.setTicketType(strTicketType);
 		ticketType.setDescription(ticketTypeUpdateDTO.getDescription());

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.intuit.tms.entities.Ticket;
 
-public interface TicketRepository extends JpaRepository<Ticket, Long>, JpaSpecificationExecutor {
+public interface TicketRepository extends JpaRepository<Ticket, Long>, JpaSpecificationExecutor<Ticket> {
 	Optional<Ticket> findById(Long id);
 }

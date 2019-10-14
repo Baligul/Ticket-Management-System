@@ -12,8 +12,6 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Account;
@@ -40,7 +38,6 @@ public class TicketServiceImpl implements TicketService {
 	@SuppressWarnings("serial")
 	@Override
 	public List<Ticket> serachTickets(Ticket filter) {
-		@SuppressWarnings("unchecked")
 		List<Ticket> tickets = ticketRepository.findAll(new Specification<Ticket>() {
 
 			@Override
@@ -95,8 +92,7 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public Ticket saveTicket(TicketDTO ticketDTO) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Ticket ticket = new Ticket();
 
 		// TODO: Here we will also write validation whether user is a valid user and
@@ -151,8 +147,7 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public Ticket updateTicket(TicketDTO ticketDTO, Long ticketId) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Ticket ticket = new Ticket();
 
 		// TODO: Here we will also write validation whether user is a valid user and

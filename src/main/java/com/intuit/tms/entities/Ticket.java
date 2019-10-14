@@ -51,6 +51,10 @@ public class Ticket extends BaseEntity {
 	public Ticket() {
 	}
 
+	public Ticket(Long id) {
+		this.setId(id);
+	}
+
 	public Ticket(Project project, TicketType ticketType, String description, String summary,
 			TicketPriorityEnum priority, Account assignee, LocalDateTime dueDate, TicketResolutionEnum resolution,
 			Status status, Long createdBy, LocalDateTime updatedOn, Long updatedBy) {

@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +65,9 @@ public class AccountServiceImpl implements AccountService {
 
 		accountRoleMapRepository.save(new AccountRoleMap(saveAccount.getId(), 2L));
 		accountTeamMapRepository.save(new AccountTeamMap(saveAccount.getId(), teamId));
+
+		account.setCreatedBy(customUserDetailsService.getCurrentLoggedInUserId());
+
 		return accountRepository.save(account);
 	}
 
@@ -109,8 +110,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account updateAccount(AccountRegistrationDTO accountRegistrationDTO, Long accountId) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Account account = new Account();
 		account.setId(accountId);
 		account.setName(accountRegistrationDTO.getName());

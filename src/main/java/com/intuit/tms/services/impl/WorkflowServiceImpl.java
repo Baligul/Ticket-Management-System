@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,8 +56,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 	public Workflow saveWorkflow(WorkflowDTO workflowDTO) {
 
 		// First save workflow in workflow table
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long createdBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Workflow workflow = new Workflow();
 		workflow.setTitle(workflowDTO.getTitle());
 		workflow.setCreatedBy(createdBy);
@@ -97,8 +94,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 	@Override
 	public Workflow updateWorkflow(WorkflowDTO workflowDTO, Long workflowId) {
 		// Update workflow title in workflow table
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long updatedBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
+		Long updatedBy = customUserDetailsService.getCurrentLoggedInUserId();
 		Workflow workflow = new Workflow();
 		workflow.setId(workflowId);
 		workflow.setTitle(workflowDTO.getTitle());
