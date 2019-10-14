@@ -109,7 +109,13 @@ public class TicketServiceImpl implements TicketService {
 		// severity and impact
 		ticket.setPriority(TicketPriorityEnum.getByValue(ticketDTO.getPriority()));
 		ticket.setResolution(TicketResolutionEnum.getByValue(ticketDTO.getResolution()));
-		ticket.setStatus(new Status(ticketDTO.getStatus()));
+
+		// Hard-coding status by default
+		if (ticketDTO.getStatus() == null || ticketDTO.getStatus().isEmpty()) {
+			ticket.setStatus(new Status("OPEN"));
+		} else {
+			ticket.setStatus(new Status(ticketDTO.getStatus()));
+		}
 
 		// TODO: Here we need to write the logic for validating a project also whether a
 		// project support the current ticket type, etc

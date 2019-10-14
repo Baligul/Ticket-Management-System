@@ -11,7 +11,7 @@ public class TeamDTO {
 
 	private String description;
 
-	private int teamType;
+	private String teamType;
 
 	// Getters and Setters
 	// ===================
@@ -31,11 +31,11 @@ public class TeamDTO {
 		this.description = description;
 	}
 
-	public int getTeamType() {
+	public String getTeamType() {
 		return teamType;
 	}
 
-	public void setTeamType(int teamType) {
+	public void setTeamType(String teamType) {
 		this.teamType = teamType;
 	}
 }

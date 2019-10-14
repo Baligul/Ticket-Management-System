@@ -3,7 +3,7 @@ CREATE TABLE team
     id                  BIGSERIAL,
     name                VARCHAR(256) NOT NULL,
     description         VARCHAR(256),
-    team_type           INTEGER,
+    team_type           VARCHAR(25),
     created_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by          BIGINT,
     updated_on          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

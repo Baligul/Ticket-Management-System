@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.intuit.tms.entities.Team;
+import com.intuit.tms.enums.TeamTypeEnum;
 import com.intuit.tms.repositories.AccountTeamMapRepository;
 import com.intuit.tms.repositories.TeamRepository;
 import com.intuit.tms.security.CustomUserDetailsService;
@@ -52,7 +53,7 @@ public class TeamServiceImpl implements TeamService {
 		Long createdBy = customUserDetailsService.getAccountIdByUserName(auth.getName());
 		Team team = new Team();
 		team.setName(teamDTO.getName());
-		team.setTeamType(teamDTO.getTeamType());
+		team.setTeamType(TeamTypeEnum.getByValue(teamDTO.getTeamType()));
 		team.setDescription(teamDTO.getDescription());
 		team.setCreatedBy(createdBy);
 		return teamRepository.save(team);
@@ -76,7 +77,7 @@ public class TeamServiceImpl implements TeamService {
 		Team team = new Team();
 		team.setId(teamId);
 		team.setName(teamDTO.getName());
-		team.setTeamType(teamDTO.getTeamType());
+		team.setTeamType(TeamTypeEnum.getByValue(teamDTO.getTeamType()));
 		team.setDescription(teamDTO.getDescription());
 		team.setUpdatedBy(updatedBy);
 		team.setUpdatedOn(LocalDateTime.now());

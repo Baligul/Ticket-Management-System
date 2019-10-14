@@ -9,6 +9,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.intuit.tms.enums.TeamTypeEnum;
+
 @Entity
 @Table(name = "team")
 public class Team extends BaseEntity {
@@ -20,7 +22,7 @@ public class Team extends BaseEntity {
 	private String description;
 
 	@Column(name = "team_type")
-	private int teamType;
+	private TeamTypeEnum teamType;
 
 	@ManyToMany(mappedBy = "teams")
 	private Set<Account> accounts;
@@ -41,7 +43,7 @@ public class Team extends BaseEntity {
 		this.setId(teamId);
 	}
 
-	public Team(@NotNull String name, String description, int teamType, Set<Account> accounts, Long createdBy,
+	public Team(@NotNull String name, String description, TeamTypeEnum teamType, Set<Account> accounts, Long createdBy,
 			LocalDateTime updatedOn, Long updatedBy) {
 		super();
 		this.name = name;
@@ -71,11 +73,11 @@ public class Team extends BaseEntity {
 		this.description = description;
 	}
 
-	public int getTeamType() {
+	public TeamTypeEnum getTeamType() {
 		return teamType;
 	}
 
-	public void setTeamType(int teamType) {
+	public void setTeamType(TeamTypeEnum teamType) {
 		this.teamType = teamType;
 	}
 
