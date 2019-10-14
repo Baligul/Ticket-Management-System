@@ -10,7 +10,7 @@ CREATE TABLE ticket
     severity        INTEGER,
     due_date        TIMESTAMP,
     resolution      INTEGER,
-    status_id       VARCHAR(256) NOT NULL REFERENCES status (status),
+    status          VARCHAR(256) NOT NULL REFERENCES status (status),
     created_on      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by      BIGINT,
     updated_on      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -12,3 +12,18 @@
 2019-10-13 23:06:17.535 IST [8342] ERROR:  update or delete on table "project" violates foreign key constraint "project_ticket_type_workflow_map_project_id_fkey" on table "project_ticket_type_workflow_map"
 2019-10-13 23:06:17.535 IST [8342] DETAIL:  Key (id)=(1) is still referenced from table "project_ticket_type_workflow_map".
 2019-10-13 23:06:17.535 IST [8342] STATEMENT:  delete from project where id=$1
+2019-10-14 00:38:50.085 IST [12912] ERROR:  column "closed" does not exist at character 79
+2019-10-14 00:38:50.085 IST [12912] STATEMENT:  insert into ticket(project_id, ticket_type,assignee,status) VALUES (1,'BUG',1,CLOSED);
+2019-10-14 00:39:01.204 IST [12912] ERROR:  insert or update on table "ticket" violates foreign key constraint "ticket_project_id_fkey"
+2019-10-14 00:39:01.204 IST [12912] DETAIL:  Key (project_id)=(1) is not present in table "project".
+2019-10-14 00:39:01.204 IST [12912] STATEMENT:  insert into ticket(project_id, ticket_type,assignee,status) VALUES (1,'BUG',1,'CLOSED');
+2019-10-14 00:40:31.973 IST [12878] ERROR:  insert or update on table "workflow_details" violates foreign key constraint "workflow_details_status_fkey"
+2019-10-14 00:40:31.973 IST [12878] DETAIL:  Key (status)=(1) is not present in table "status".
+2019-10-14 00:40:31.973 IST [12878] STATEMENT:  insert into workflow_details (created_on, sequence, status, workflow_id) values ($1, $2, $3, $4)
+2019-10-14 00:42:15.984 IST [12878] ERROR:  insert or update on table "project_ticket_type_workflow_map" violates foreign key constraint "project_ticket_type_workflow_map_ticket_type_fkey"
+2019-10-14 00:42:15.984 IST [12878] DETAIL:  Key (ticket_type)=(CLOSED) is not present in table "ticket_type".
+2019-10-14 00:42:15.984 IST [12878] STATEMENT:  insert into project_ticket_type_workflow_map (created_on, project_id, ticket_type, workflow_id) values ($1, $2, $3, $4)
+2019-10-14 00:47:29.020 IST [2095] LOG:  received smart shutdown request
+2019-10-14 00:47:29.022 IST [2095] LOG:  background worker "logical replication launcher" (PID 2102) exited with exit code 1
+2019-10-14 00:47:29.022 IST [2097] LOG:  shutting down
+2019-10-14 00:47:29.028 IST [2095] LOG:  database system is shut down
