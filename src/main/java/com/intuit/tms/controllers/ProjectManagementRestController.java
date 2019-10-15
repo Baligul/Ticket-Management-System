@@ -21,7 +21,10 @@ import com.intuit.tms.entities.Project;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.ProjectService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Project Management APIs", produces = "application/json", tags = { "A6" })
 public class ProjectManagementRestController {
 
 	@Autowired

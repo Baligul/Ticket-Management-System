@@ -21,7 +21,10 @@ import com.intuit.tms.entities.Team;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TeamService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Team Management APIs", produces = "application/json", tags = { "A1" })
 public class TeamManagementRestController {
 
 	@Autowired

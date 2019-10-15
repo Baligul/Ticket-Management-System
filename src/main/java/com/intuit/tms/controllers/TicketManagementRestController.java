@@ -22,7 +22,10 @@ import com.intuit.tms.entities.Ticket;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TicketService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Ticket Management APIs", produces = "application/json", tags = { "A7" })
 public class TicketManagementRestController {
 
 	@Autowired

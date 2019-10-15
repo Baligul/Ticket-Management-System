@@ -21,7 +21,10 @@ import com.intuit.tms.entities.Workflow;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.WorkflowService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Workflow Management APIs", produces = "application/json", tags = { "A4" })
 public class WorkflowManagementRestController {
 
 	@Autowired

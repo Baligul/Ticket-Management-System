@@ -24,7 +24,10 @@ import com.intuit.tms.services.AccountService;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.TeamService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Account Management APIs", produces = "application/json", tags = { "A2" })
 public class AccountManagementRestController {
 
 	@Autowired

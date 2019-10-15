@@ -23,7 +23,10 @@ import com.intuit.tms.entities.Status;
 import com.intuit.tms.services.ErrorBuilderService;
 import com.intuit.tms.services.StatusService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Status Management APIs", produces = "application/json", tags = { "A3" })
 public class StatusManagementRestController {
 
 	@Autowired

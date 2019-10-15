@@ -21,7 +21,10 @@ import com.intuit.tms.entities.Comment;
 import com.intuit.tms.services.CommentService;
 import com.intuit.tms.services.ErrorBuilderService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(description = "Comment Management APIs", produces = "application/json", tags = { "A8" })
 public class CommentRestController {
 
 	@Autowired
@@ -73,7 +76,8 @@ public class CommentRestController {
 			return new ResponseEntity<Object>(comments, HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<Object>(
-					"Comments by user for ticket cannot be fetched, Reason: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+					"Comments by user for ticket cannot be fetched, Reason: " + ex.getMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
