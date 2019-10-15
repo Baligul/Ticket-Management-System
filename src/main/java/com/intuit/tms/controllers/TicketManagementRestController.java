@@ -116,8 +116,9 @@ public class TicketManagementRestController {
 		}
 	}
 
-	@PutMapping("/api/v1/ticket/{ticketId}/status")
-	public ResponseEntity<Object> updateTicketStatus(@PathVariable(name = "ticketId") Long ticketId, String status) {
+	@PutMapping("/api/v1/ticket/{ticketId}/status/{status}")
+	public ResponseEntity<Object> updateTicketStatus(@PathVariable(name = "ticketId") Long ticketId,
+			@PathVariable(name = "status") String status) {
 
 		Ticket existing = ticketService.getTicketById(ticketId);
 		if (existing == null) {
@@ -135,9 +136,9 @@ public class TicketManagementRestController {
 		}
 	}
 
-	@PutMapping("/api/v1/ticket/{ticketId}/resolution")
+	@PutMapping("/api/v1/ticket/{ticketId}/resolution/{resolution}")
 	public ResponseEntity<Object> updateTicketResolution(@PathVariable(name = "ticketId") Long ticketId,
-			String resolution) {
+			@PathVariable(name = "resolution") String resolution) {
 
 		Ticket existing = ticketService.getTicketById(ticketId);
 		if (existing == null) {
@@ -155,8 +156,9 @@ public class TicketManagementRestController {
 		}
 	}
 
-	@PutMapping("/api/v1/ticket/{ticketId}/assignee")
-	public ResponseEntity<Object> updateTicketAssignee(@PathVariable(name = "ticketId") Long ticketId, Long assignee) {
+	@PutMapping("/api/v1/ticket/{ticketId}/assignee/{assignee}")
+	public ResponseEntity<Object> updateTicketAssignee(@PathVariable(name = "ticketId") Long ticketId,
+			@PathVariable(name = "assignee") Long assignee) {
 
 		Ticket existing = ticketService.getTicketById(ticketId);
 		if (existing == null) {
@@ -174,9 +176,9 @@ public class TicketManagementRestController {
 		}
 	}
 
-	@PutMapping("/api/v1/ticket/{ticketId}/priority")
+	@PutMapping("/api/v1/ticket/{ticketId}/priority/{priority}")
 	public ResponseEntity<Object> updateTicketPriority(@PathVariable(name = "ticketId") Long ticketId,
-			String priority) {
+			@PathVariable(name = "priority") String priority) {
 
 		Ticket existing = ticketService.getTicketById(ticketId);
 		if (existing == null) {

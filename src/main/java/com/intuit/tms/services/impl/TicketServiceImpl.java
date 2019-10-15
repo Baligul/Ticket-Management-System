@@ -205,14 +205,26 @@ public class TicketServiceImpl implements TicketService {
 	public void updateTicketStatus(String status, Long ticketId) {
 		// TODO Only the person who are having authorities to work on project /ticket
 		// can change the status
-		ticketRepository.findById(ticketId).get().setStatus(new Status(status));
+
+		// get the ticket based on ticket Id
+		Ticket ticket = ticketRepository.findById(ticketId).get();
+		ticket.setStatus(new Status(status));
+
+		// Update ticket status
+		ticketRepository.save(ticket);
 	}
 
 	@Override
 	public void updateTicketResolution(String resolution, Long ticketId) {
 		// TODO Only the person who are having authorities to work on project /ticket
 		// can change the resolution
-		ticketRepository.findById(ticketId).get().setResolution(TicketResolutionEnum.getByValue(resolution));
+
+		// get the ticket based on ticket Id
+		Ticket ticket = ticketRepository.findById(ticketId).get();
+		ticket.setResolution(TicketResolutionEnum.getByValue(resolution));
+
+		// Update ticket resolution
+		ticketRepository.save(ticket);
 	}
 
 	@Override
@@ -220,13 +232,25 @@ public class TicketServiceImpl implements TicketService {
 		// TODO: Here we will also write validation whether user is a valid user and
 		// also have
 		// privileges to be assigned to this project
-		ticketRepository.findById(ticketId).get().setAssignee(accountRepository.findById(assignee).get());
+
+		// get the ticket based on ticket Id
+		Ticket ticket = ticketRepository.findById(ticketId).get();
+		ticket.setAssignee(accountRepository.findById(assignee).get());
+
+		// Update ticket assignee
+		ticketRepository.save(ticket);
 	}
 
 	@Override
 	public void updateTicketPriority(String priority, Long ticketId) {
 		// TODO Only the person who are having authorities to work on project /ticket
 		// can change the priority
-		ticketRepository.findById(ticketId).get().setPriority(TicketPriorityEnum.getByValue(priority));
+
+		// get the ticket based on ticket Id
+		Ticket ticket = ticketRepository.findById(ticketId).get();
+		ticket.setPriority(TicketPriorityEnum.getByValue(priority));
+
+		// Update ticket priority
+		ticketRepository.save(ticket);
 	}
 }
